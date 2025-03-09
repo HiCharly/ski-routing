@@ -21,6 +21,7 @@ function WayHandlers.skiaerialway(profile,way,result,data)
 	if duration and durationIsValid(duration) then
 		result.duration = math.max( parseDuration(duration), 1 )
 	end
+	
 	-- station, goods
 	if in_array(data.aerialway, {'gondola', 'cable_car', 'mixed_lift'}) then
 		result.forward_classes['gondola'] = true;
@@ -38,7 +39,6 @@ function WayHandlers.skiaerialway(profile,way,result,data)
 		result.forward_rate=result.forward_speed/4;
 	else 
 		-- remaining: goods, station, pilon, yes
-		--print(data.aerialway);
 		result.forward_mode = mode.inaccessible;
 		return false;
 	end
@@ -105,7 +105,6 @@ function setup()
   return {
     properties = {
 		weight_name = 'routability',
-		--force_split_edges = true
     }, 
     default_mode = mode.ferry,
     default_speed = 1,
