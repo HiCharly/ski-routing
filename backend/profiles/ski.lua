@@ -100,12 +100,6 @@ function WayHandlers.foot(profile,way,result,data)
     return result;
 end
 
-function WayHandlers.namesfromrelations(profile,way,result,data,relations)
-	if not result.name or result.name == '' then result.name = get_from_rel(relations, way, "piste:type", '*', "name"); end
-	if not result.name or result.name == '' then result.name = get_from_rel(relations, way, "piste:type", '*', "ref"); end
-	if not result.name or result.name == '' then result.name = get_from_rel(relations, way, "route", 'ski', "name"); end
-end
-
 function setup()
   return {
     properties = {
@@ -142,11 +136,6 @@ function process_way(profile, way, result, relations)
 		data.aerialway = 'gondola'
 	end
 
-	-- data.piste from relation's piste:type
-	if not data.piste then data.piste = get_from_rel(relations, way, "piste:type", '*', "piste:type"); end
-	-- if data.piste is still not set, every way in route=ski is piste:type=nordic
-	if not data.piste and get_from_rel(relations, way, "route", 'ski', "route") then data.piste='nordic'; end
-
 	-- if (not data.aerialway or data.aerialway =='') and (not data.piste or data.piste == '') then
 	-- 	return
 	-- end
@@ -154,7 +143,6 @@ function process_way(profile, way, result, relations)
 	handlers = Sequence {
 		WayHandlers.default_mode,
 		WayHandlers.names,
-		WayHandlers.namesfromrelations,
 		-- WayHandlers.oneway,
         WayHandlers.foot,
 		WayHandlers.skiaerialway,
