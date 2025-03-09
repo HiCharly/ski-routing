@@ -9,7 +9,7 @@ Relations = require("lib/relations")
 require("handlers");
 
 function WayHandlers.skiaerialway(profile,way,result,data)
-	if not data.aerialway or data.aerialway =='' then 
+	if is_empty(data.aerialway) then 
 		return;
 	end
 
@@ -24,18 +24,18 @@ function WayHandlers.skiaerialway(profile,way,result,data)
 		result.duration = math.max( parseDuration(duration), 1 )
 	end
 	-- station, goods
-	if data.aerialway == 'gondola' or data.aerialway == 'cable_car' or data.aerialway == 'mixed_lift' then
+	if in_array(data.aerialway, {'gondola', 'cable_car', 'mixed_lift'}) then
 		result.forward_classes['gondola'] = true;
 		result.backward_classes['gondola'] = true;
 		result.backward_mode = mode.ferry;
 		result.backward_speed=result.forward_speed;
 		result.backward_rate=result.forward_rate/10;
-	elseif data.aerialway == 'chair_lift' then
+	elseif in_array(data.aerialway, {'chair_lift'}) then
 		result.forward_classes['chairlift'] = true;
-	elseif data.aerialway == 't-bar' or data.aerialway == 'j-bar' or data.aerialway == 'platter' or data.aerialway == 'drag_lift' then
+	elseif in_array(data.aerialway, {'t-bar', 'j-bar', 'platter', 'drag_lift'}) then
 		result.forward_classes['platter'] = true;
 		result.forward_rate=result.forward_speed/4;
-	elseif data.aerialway == 'rope_tow' or data.aerialway == 'zip_line' or data.aerialway == 'magic_carpet' then 
+	elseif in_array(data.aerialway, {'rope_tow', 'zip_line', 'magic_carpet'})  then 
 		result.forward_classes['child'] = true;
 		result.forward_rate=result.forward_speed/4;
 	else 
@@ -52,7 +52,7 @@ end
 
 function WayHandlers.skipiste(profile,way,result,data)
 	-- piste: downhill, foot (for foot transfer between stations)
-	if not data.piste or data.piste == '' then
+	if is_empty(data.piste) then
 		return;
 	end
     
@@ -87,7 +87,7 @@ end
 
 function WayHandlers.foot(profile,way,result,data)
 	-- authorize foot only across areas and the Airelles bridge
-	local isArea = data.piste ~= '' and way:get_value_by_key('area') == 'yes'
+	local isArea = (not is_empty(data.piste)) and way:get_value_by_key('area') == 'yes'
 	local isAirellesBridge = way:get_value_by_key('name') == 'Passerelle Airelles Express'
 	if not isArea and not isAirellesBridge then
 		return;

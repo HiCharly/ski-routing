@@ -10,3 +10,18 @@ function get_from_rel(relations, way, key, value, ret, forward)
         end
         return nil;
 end
+
+function is_empty(s)
+        return s == nil or s == ''
+end
+      
+
+function in_array(needle, tab)
+        for index, value in ipairs(tab) do
+                if value == needle then
+                        return true
+                end
+        end
+
+        return false
+end
