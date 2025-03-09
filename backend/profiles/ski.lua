@@ -84,12 +84,13 @@ function WayHandlers.skipiste(profile,way,result,data)
 end
 
 function WayHandlers.foot(profile,way,result,data)
-	-- piste: downhill, foot (for foot transfer between stations)
-	if way:get_value_by_key('area') ~= 'yes' then
+	-- authorize foot only across areas and the Airelles bridge
+	local isArea = data.piste ~= '' and way:get_value_by_key('area') == 'yes'
+	local isAirellesBridge = way:get_value_by_key('name') == 'Passerelle Airelles Express'
+	if not isArea and not isAirellesBridge then
 		return;
 	end
 
-    result.roundabout = true;
     result.forward_speed=3;
     result.forward_rate=3;
     result.backward_speed=3;
