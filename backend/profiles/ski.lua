@@ -16,6 +16,7 @@ function WayHandlers.skiaerialway(profile,way,result,data)
 	result.forward_speed=15;
 	result.forward_rate=15;
 	result.backward_mode = mode.inaccessible;
+	result.is_startpoint = false;
 
 	-- duration of gondolas
 	local duration  = way:get_value_by_key("duration")
@@ -45,6 +46,7 @@ function WayHandlers.skiaerialway(profile,way,result,data)
 	end
 	result.forward_mode = mode.ferry;
 	result.name = result.name .. ' 🚡';
+	
     return result;
 end
 
