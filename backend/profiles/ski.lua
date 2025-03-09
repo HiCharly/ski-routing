@@ -1,11 +1,9 @@
--- exclude: ski lifts
-
 api_version = 3
+
 Set = require('lib/set')
 Sequence = require('lib/sequence')
 Handlers = require("lib/way_handlers")
 Relations = require("lib/relations")
---require("segments-ski");
 require("handlers");
 
 function WayHandlers.skiaerialway(profile,way,result,data)
@@ -112,7 +110,7 @@ function setup()
     default_mode = mode.ferry,
     default_speed = 1,
     classes = Sequence {
-        'gondola', 'chairlift', 'platter', 'child', 'nordic'
+        'gondola', 'chairlift', 'platter', 'child'
     },
     -- classes to support for exclude flags
     excludable = Sequence {
@@ -121,7 +119,6 @@ function setup()
         Set {'platter'},
 		Set {'child'},
 		Set {'gondola','chairlift','platter','child'},
-		Set {'nordic'}
     },
     relation_types = Sequence {
       "route", "piste:type"
@@ -139,18 +136,12 @@ function process_way(profile, way, result, relations)
 		data.aerialway = 'gondola'
 	end
 
-	-- if (not data.aerialway or data.aerialway =='') and (not data.piste or data.piste == '') then
-	-- 	return
-	-- end
-
 	handlers = Sequence {
 		WayHandlers.default_mode,
 		WayHandlers.names,
-		-- WayHandlers.oneway,
         WayHandlers.foot,
 		WayHandlers.skiaerialway,
         WayHandlers.skipiste,
-		-- WayHandlers.skinordic, -- grep nordic
 	}
 	WayHandlers.run(profile, way, result, data, handlers, relations)
 end
